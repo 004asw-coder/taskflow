@@ -6,6 +6,8 @@ import com.example.taskflow.entity.*;
 import com.example.taskflow.exception.NotFoundException;
 import com.example.taskflow.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +41,11 @@ public class TaskService {
 
     public List<TaskResponse> getAll() {
         return taskRepo.findAll().stream().map(this::toResponse).toList();
+    }
+
+    public Page<TaskResponse> search(String title, TaskStatus status, Long projectId, Pageable pageable) {
+        String t = (title == null || title.isBlank()) ? null : title.trim();
+        return taskRepo.search(t, status, projectId, pageable).map(this::toResponse);
     }
 
     public TaskResponse getById(Long id) {
