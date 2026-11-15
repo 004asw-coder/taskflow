@@ -8,10 +8,12 @@ import com.example.taskflow.exception.NotFoundException;
 import com.example.taskflow.repository.ProjectRepository;
 import com.example.taskflow.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -30,7 +32,9 @@ public class ProjectService {
                 .description(req.description())
                 .owner(owner)
                 .build();
-        return toResponse(projectRepo.save(project));
+        Project saved = projectRepo.save(project);
+        log.info("Project created: id={}, name={}", saved.getId(), saved.getName());
+        return toResponse(saved);
     }
 
     public List<ProjectResponse> getAll() {
@@ -45,11 +49,13 @@ public class ProjectService {
         Project project = find(id);
         project.setName(req.name());
         project.setDescription(req.description());
+        log.info("Project updated: id={}", id);
         return toResponse(projectRepo.save(project));
     }
 
     public void delete(Long id) {
         projectRepo.delete(find(id));
+        log.info("Project deleted: id={}", id);
     }
 
     private Project find(Long id) {

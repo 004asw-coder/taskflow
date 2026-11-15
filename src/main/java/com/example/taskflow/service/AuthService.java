@@ -8,11 +8,13 @@ import com.example.taskflow.entity.User;
 import com.example.taskflow.repository.UserRepository;
 import com.example.taskflow.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -36,6 +38,7 @@ public class AuthService {
                 .role(Role.USER)
                 .build();
         userRepo.save(user);
+        log.info("User registered: {}", user.getUsername());
         return new AuthResponse(jwt.generate(user.getUsername(), user.getRole().name()),
                 user.getUsername(), user.getRole().name());
     }
@@ -44,6 +47,7 @@ public class AuthService {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.username(), req.password()));
         User user = userRepo.findByUsername(req.username()).orElseThrow();
+        log.info("User logged in: {}", user.getUsername());
         return new AuthResponse(jwt.generate(user.getUsername(), user.getRole().name()),
                 user.getUsername(), user.getRole().name());
     }

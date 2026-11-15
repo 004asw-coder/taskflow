@@ -6,12 +6,14 @@ import com.example.taskflow.entity.*;
 import com.example.taskflow.exception.NotFoundException;
 import com.example.taskflow.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskService {
@@ -36,7 +38,9 @@ public class TaskService {
                 .project(project)
                 .assignee(assignee)
                 .build();
-        return toResponse(taskRepo.save(task));
+        Task saved = taskRepo.save(task);
+        log.info("Task created: id={}, title={}", saved.getId(), saved.getTitle());
+        return toResponse(saved);
     }
 
     public List<TaskResponse> getAll() {
@@ -57,11 +61,13 @@ public class TaskService {
         task.setTitle(req.title());
         task.setDescription(req.description());
         task.setDeadline(req.deadline());
+        log.info("Task updated: id={}", id);
         return toResponse(taskRepo.save(task));
     }
 
     public void delete(Long id) {
         taskRepo.delete(find(id));
+        log.info("Task deleted: id={}", id);
     }
 
     private Task find(Long id) {
