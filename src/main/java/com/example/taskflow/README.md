@@ -21,7 +21,7 @@ DTO отделяют API от сущностей. Паттерны: Builder (Lom
 ## Запуск
 1. Установить JDK 21 и PostgreSQL.
 2. Создать базу `taskdb`.
-3. В `src/main/resources/application.properties` указать пароль PostgreSQL.
+3. В `../../../../resources/application.properties` указать пароль PostgreSQL.
 4. Запустить `TaskflowApplication`. Сервер: http://localhost:8080
 5. Swagger UI: http://localhost:8080/swagger-ui/index.html
 
@@ -49,7 +49,7 @@ DTO отделяют API от сущностей. Паттерны: Builder (Lom
 Запуск: `TaskServiceTest` (JUnit 5 + Mockito) или `mvnw.cmd test`.
 
 ## Postman
-Коллекция лежит в папке `postman/`.
+Коллекция лежит в папке `../../../../../../postman`.
 
 ## Swagger UI
 ![Swagger](docs/swagger.png)
